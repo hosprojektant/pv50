@@ -18,7 +18,7 @@ def get_temperature():
     if temperature is None:
         return jsonify({'error': 'Failed to retrieve temperature'}), 500
 
-    return jsonify({'temperature': temperature})
+    return jsonify(temperature)
 
 def get_coordinates(airport_code):
     url = f"http://www.airport-data.com/api/ap_info.json?iata={airport_code}"
@@ -73,21 +73,16 @@ def get_stock_price():
     if price is None:
         return jsonify({'error': 'Failed to retrieve stock price'}), 500
 
-    return jsonify({'price': price})
+    return jsonify(price)
 
 def query_stock_price(stock_symbol):
-    # URL pro dotaz na aktuální cenu akcie pomocí symbolu
     url = f"https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol={stock_symbol}&apikey=O2HLYPMEI7EU85ZL"
 
     try:
-        # Odeslání GET požadavku na Alpha Vantage API
         response = requests.get(url)
-        response.raise_for_status()  # Zkontroluje, zda byl požadavek úspěšný
+        response.raise_for_status()  
 
-        # Získání dat o ceně akcie z odpovědi API
         stock_data = response.json()
-
-        # Získání aktuální ceny akcie
         price = float(stock_data['Global Quote']['05. price'])
 
         return price
@@ -107,7 +102,7 @@ def evaluate_expression():
     if result is None:
         return jsonify({'error': 'Failed to evaluate expression'}), 500
 
-    return format_response(result)
+    return jsonify(result)
 
 
 
