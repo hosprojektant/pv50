@@ -6,11 +6,22 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
-    return 'Hello, this is a REST service for temperature, stock price, and arithmetic expression evaluation.'
+    argument1 = request.args.get('queryAirportTemp')
+    argument2 = request.args.get('queryStockPrice')
+    argument3 = request.args.get('queryEval')
+    e = None
+    print(argument1)
+    if argument1:
+        e = get_temperature(argument1)
+    if argument2:
+        e = get_stock_price(argument2)
+    if argument3:
+        e= evaluate_expression(argument3)
+    print(e,"ZZZ")
+    return e 
 
-@app.route('/temperature')
-def get_temperature():
-    airport_code = request.args.get('queryAirportTemp')
+def get_temperature(value):
+    airport_code = value
     if not airport_code:
         return jsonify({'error': 'Missing queryAirportTemp parameter'}), 400
 
@@ -63,9 +74,8 @@ def query_temperature(airport_code):
         print(f"Error while querying temperature: {e}")
         return None
 
-@app.route('/stock-price')
-def get_stock_price():
-    stock_symbol = request.args.get('queryStockPrice')
+def get_stock_price(value):
+    stock_symbol = value
     if not stock_symbol:
         return jsonify({'error': 'Missing queryStockPrice parameter'}), 400
 
@@ -92,9 +102,8 @@ def query_stock_price(stock_symbol):
         return None
 
 
-@app.route('/evaluate')
-def evaluate_expression():
-    expression = request.args.get('queryEval')
+def evaluate_expression(value):
+    expression = value
     if not expression:
         return jsonify({'error': 'Missing queryEval parameter'}), 400
 
